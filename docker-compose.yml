@@ -1,0 +1,33 @@
+version: '3.4'
+services:
+  web:
+    build: 
+      context: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/code
+    links:
+      - mysql:mysql
+      - redis
+    depends_on:
+      - mysql
+    command: ["/wait-for-it.sh", "mysql:3306", "--","node","/usr/src/app/server/server.js"]   
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_HOST: localhost
+      MYSQL_DATABASE: koma_cms
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_PASSWORD: 1234
+    restart: unless-stopped
+    
