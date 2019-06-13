@@ -15,12 +15,16 @@ services:
     command: ["/wait-for-it.sh", "mysql:3306", "--","node","/usr/src/app/server/server.js"]   
   redis:
     image: redis
+    volumes:
+      - ./cache:/tmp/cache
     ports:
       - "6379:6379"
     command: ["redis-server", "--appendonly", "yes"]
     hostname: redis
   mysql:
     image: mysql:5.7
+    volumes:
+      - ./mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
     environment:
