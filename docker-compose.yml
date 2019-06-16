@@ -12,7 +12,7 @@ services:
       - redis
     depends_on:
       - mysql
-    command: ["/wait-for-it.sh", "mysql:3306", "--","node","/usr/src/app/server/server.js"]   
+    command: ["/wait-for-it.sh", "mysql:3306", "--","node","/usr/src/app/server/server.js"]
   redis:
     image: redis
     volumes:
@@ -25,13 +25,13 @@ services:
     image: mysql:5.7
     volumes:
       - ./mysql_data:/var/lib/mysql
+      - ./mysql-dump:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
     environment:
       MYSQL_HOST: localhost
-      MYSQL_DATABASE: koma_cms
       MYSQL_USER: root
       MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_PASSWORD: 1234
-    restart: unless-stopped
+    restart: always
+    command: --lower_case_table_names=1
     
